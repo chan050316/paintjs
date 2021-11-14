@@ -1,10 +1,11 @@
 const canvas = document.querySelector('#jsCanvas');
 const ctx = canvas.getContext('2d');
-const range = document.querySelector('#jsRange');
 const colors = document.querySelectorAll('.jsColor');
 const mode = document.querySelector('#jsMode');
+const range = document.querySelector('#jsRange');
 const save = document.querySelector('#jsSave');
 
+const defaultColor = '#2c2c2c'
 const canvasSize = 700;
 
 canvas.width = canvasSize;
@@ -12,16 +13,17 @@ canvas.height = canvasSize;
 
 ctx.fillStyle = 'white';
 ctx.fillRect(0, 0, canvasSize, canvasSize);
-ctx.strokeStyle = '#2c2c2c';
-ctx.fillStyle = '#2c2c2c';
+ctx.strokeStyle = defaultColor;
+ctx.fillStyle = defaultColor;
 ctx.lineWidth = 2.5;
 
 let painting = false;
 let filling = false;
 
 function mousemove(event) {
-    const x = event.offsetX; 
+    const x = event.offsetX;
     const y = event.offsetY;
+    
     if(!painting) {
         ctx.beginPath();
         ctx.moveTo(x, y);
@@ -39,63 +41,50 @@ function stopPainting() {
     painting = false;
 }
 
-function changerange(event) {
-    ctx.lineWidth = event.target.value;
-}
-
 function changeColor(event) {
-    const color = event.target.style.backgroundColor
+    const color = event.target.style.backgroundColor;
 
     ctx.strokeStyle = color;
-    ctx.fillStyle = color;
+    ctx.fillStyle = ctx.strokeStyle;
 }
 
 function changeMode(event) {
     if(filling) {
-        event.target.innerText = 'FILL'
         filling = false;
-
+        event.target.innerText = 'FILL';
     } else {
-        event.target.innerText = 'STROKE'
         filling = true;
+        event.target.innerText = 'STROKE';
     }
 }
 
-function changeBgColor() {
-    if (filling) {
-        ctx.fillRect(0, 0, canvasSize, canvasSize)
+function fillCanvas() {
+    if(filling) {
+        ctx.fillRect(0, 0, canvasSize, canvasSize);
     }
 }
 
-function handleCM(event) {
-    event.preventDefault();
-    //이벤트를 취소할 수 있는 경우, 이벤트의 전파를 막지않고 그 이벤트를 취소합니다.
+function changeStroke() {
+    ctx.lineWidth = range.value;
 }
 
-function canvasSave() {
-    const image = canvas.toDataURL();
+function saving() {
+    const url = canvas.toDataURL();
     const link = document.createElement('a');
-    link.href = image;
-    link.download = '😃';
+    link.href = url;
+    link.download = 'aaa';
     link.click();
 }
 
-// canvas Event
+// canvas EventListener
 canvas.addEventListener('mousemove', mousemove);
 canvas.addEventListener('mousedown', startPainting);
-canvas.addEventListener('mouseleave', stopPainting);
 canvas.addEventListener('mouseup', stopPainting);
-canvas.addEventListener('click', changeBgColor);
-// canvas.addEventListener('contextmenu', handleCM)
+canvas.addEventListener('mouseleave', stopPainting);
+canvas.addEventListener('click', fillCanvas)
 
-// range Event
-range.addEventListener('input', changerange);
-
-// colors Event
+// other EventListener
 colors.forEach(color => color.addEventListener('click', changeColor));
-
-// mode Event
 mode.addEventListener('click', changeMode);
-
-// save Event
-save.addEventListener('click', canvasSave);
+range.addEventListener('input', changeStroke);
+save.addEventListener('click', saving)
