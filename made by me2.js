@@ -4,6 +4,7 @@ const colors = document.querySelectorAll('.jsColor');
 const mode = document.querySelector('#jsMode');
 const range = document.querySelector('#jsRange');
 const save = document.querySelector('#jsSave');
+const remove = document.querySelector('#jsRemove');
 
 const defaultColor = '#2c2c2c'
 const canvasSize = 700;
@@ -76,15 +77,22 @@ function saving() {
     link.click();
 }
 
+function removing() {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvasSize, canvasSize);
+    ctx.fillStyle = defaultColor;
+}
+
 // canvas EventListener
 canvas.addEventListener('mousemove', mousemove);
 canvas.addEventListener('mousedown', startPainting);
 canvas.addEventListener('mouseup', stopPainting);
 canvas.addEventListener('mouseleave', stopPainting);
-canvas.addEventListener('click', fillCanvas)
+canvas.addEventListener('click', fillCanvas);
 
 // other EventListener
 colors.forEach(color => color.addEventListener('click', changeColor));
 mode.addEventListener('click', changeMode);
 range.addEventListener('input', changeStroke);
-save.addEventListener('click', saving)
+save.addEventListener('click', saving);
+remove.addEventListener('click', removing);
