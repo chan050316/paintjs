@@ -62,7 +62,7 @@ function changeMode() {
 
 function changebgColor() {
     if (filling) {
-        ctx.fillRect(0, 0, canvasSize, canvasSize)
+      ctx.fillRect(0, 0, canvasSize, canvasSize)
     }
 }
 
@@ -97,6 +97,4 @@ colorEls.forEach(color => color.addEventListener('click', changeColor));
 
 mode.addEventListener('click', changeMode);
 
-saveBtn.addEventListener('click', saving)
-
-
+saveBtn.addEventListener('click', saving);
